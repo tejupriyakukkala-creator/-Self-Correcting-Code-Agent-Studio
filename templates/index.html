@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Correcting Code Agent Studio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-page: #f4f6fb;
+            --bg-card: #ffffff;
+            --bg-card-subtle: #f8fafc;
+            --border-color: #e2e8f0;
+            --border-hover: #cbd5e1;
+            
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --primary-hover: #4338ca;
+            --purple-btn: #6366f1;
+            
+            --accent-blue: #2563eb;
+            --accent-cyan: #0891b2;
+            --accent-teal: #0d9488;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            
+            --text-main: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        }
+
+        body.dark-theme {
+            --bg-page: #090d16;
+            --bg-card: #111827;
+            --bg-card-subtle: #1f2937;
+            --border-color: #374151;
+            --border-hover: #4b5563;
+            
+            --text-main: #f9fafb;
+            --text-secondary: #e5e7eb;
+            --text-muted: #9ca3af;
+            --text-light: #6b7280;
+            --primary-light: rgba(99, 102, 241, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Top Navbar */
+        header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 64px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .brand-title-group h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.4rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--bg-card-subtle);
+            color: var(--text-main);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+
+        .user-profile:hover {
+            background: var(--bg-card-subtle);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #818cf8;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Search Container */
+        .search-bar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            max-width: 480px;
+            margin: 0 1.5rem;
+        }
+
+        .search-bar-inner {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 0.85rem 0.5rem 2.2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card-subtle);
+            font-size: 0.82rem;
+            outline: none;
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: var(--bg-card);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 0.95rem;
+            border-radius: 18px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-search:hover {
+            background: var(--primary-hover);
+        }
+
+        /* App Layout (Sidebar + Main + Right Metrics) */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr 310px;
+            gap: 1.25rem;
+            padding: 1.25rem;
+            max-width: 1720px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item i {
+            font-size: 1rem;
+            width: 20px;
+            color: var(--text-muted);
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--primary);
+        }
+
+        .nav-item:hover i {
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .nav-item.active i {
+            color: var(--primary);
+        }
+
+        .nav-heading {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.05em;
+            padding: 0 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .sidebar-card {
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            border: 1px solid #c7d2fe;
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        body.dark-theme .sidebar-card {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            border-color: #4338ca;
+        }
+
+        .sidebar-card-icon {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            color: var(--primary);
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-card h4 {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--primary-hover);
+            line-height: 1.3;
+        }
+
+        body.dark-theme .sidebar-card h4 {
+            color: #a5b4fc;
+        }
+
+        /* Main Workspace Container */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+            border: 1px solid #c7d2fe;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-theme .hero-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
+            border-color: #4338ca;
+        }
+
+        .hero-left {
+            max-width: 60%;
+        }
+
+        .hero-left h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e1b4b;
+            margin-bottom: 0.4rem;
+        }
+
+        body.dark-theme .hero-left h2 {
+            color: #e0e7ff;
+        }
+
+        .hero-left p {
+            font-size: 0.88rem;
+            color: #4338ca;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        body.dark-theme .hero-left p {
+            color: #c7d2fe;
+        }
+
+        .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .hero-pill {
+            background: #ffffff;
+            color: var(--primary);
+            border: 1px solid #c7d2fe;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme .hero-pill {
+            background: #312e81;
+            color: #c7d2fe;
+            border-color: #4338ca;
+        }
+
+        .hero-illustration {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bot-graphic {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2.2rem;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .hero-flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #3730a3;
+        }
+
+        body.dark-theme .hero-flow-steps {
+            color: #a5b4fc;
+        }
+
+        /* Task & Code Editor Grid */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 290px 1fr 230px;
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .tab-item {
+            padding: 0.5rem 0.85rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .tab-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 130px;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            padding: 0.75rem;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            background: var(--bg-card);
+        }
+
+        .select-input {
+            width: 100%;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            outline: none;
+            font-weight: 600;
+        }
+
+        .btn-purple-start {
+            width: 100%;
+            background: var(--purple-btn);
+            color: #fff;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-purple-start:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-purple-start:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Live Code View Window */
+        .code-view-container {
+            background: #0f172a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 250px;
+        }
+
+        .code-view-header {
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+
+        .code-file-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .btn-copy {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #cbd5e1;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            cursor: pointer;
+        }
+
+        .code-view-body {
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #38bdf8;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Vertical Stepper Workflow */
+        .stepper-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .step-item.passed .step-number {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff;
+        }
+
+        .step-item.failed .step-number {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: #fff;
+        }
+
+        .step-item.active .step-number {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .step-info h5 {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .step-info p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* Bottom Terminal & Fix Panel */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .console-terminal {
+            background: #020617;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            min-height: 220px;
+            max-height: 280px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .terminal-cmd {
+            color: #38bdf8;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .terminal-err {
+            color: #f87171;
+            white-space: pre-wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .terminal-log {
+            color: #4ade80;
+            margin-top: 0.25rem;
+        }
+
+        .agent-fix-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        body.dark-theme .agent-fix-box {
+            background: #0c4a6e;
+            border-color: #0284c7;
+        }
+
+        .fix-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0369a1;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        body.dark-theme .fix-header {
+            color: #e0f2fe;
+        }
+
+        .fix-text {
+            font-size: 0.82rem;
+            color: #0c4a6e;
+            line-height: 1.5;
+        }
+
+        body.dark-theme .fix-text {
+            color: #bae6fd;
+        }
+
+        .fix-code-box {
+            background: #ffffff;
+            border: 1px solid #e0f2fe;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #0284c7;
+            white-space: pre-wrap;
+        }
+
+        body.dark-theme .fix-code-box {
+            background: #0284c7;
+            color: #f0f9ff;
+            border-color: #38bdf8;
+        }
+
+        .fix-badge {
+            align-self: flex-start;
+            background: var(--success);
+            color: #fff;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* Right Metrics Sidebar */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .run-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .run-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.65rem 0.75rem;
+            border-radius: 10px;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .run-item:hover {
+            border-color: var(--primary);
+            background: var(--bg-card);
+        }
+
+        .run-item-left {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .status-icon.passed { background: var(--success); }
+        .status-icon.failed { background: var(--danger); }
+
+        .run-info h5 {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .run-info p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Performance Chart Card */
+        .performance-box {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .donut-chart {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-cyan) 0% 96%, #e2e8f0 96% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .donut-inner {
+            width: 58px;
+            height: 58px;
+            background: var(--bg-card);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.88rem;
+            color: var(--text-main);
+        }
+
+        .stats-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+
+        .stat-row strong {
+            color: var(--text-main);
+        }
+
+        .pro-tip-box {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 14px;
+            padding: 1rem;
+            color: #065f46;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        body.dark-theme .pro-tip-box {
+            background: #064e3b;
+            border-color: #047857;
+            color: #a7f3d0;
+        }
+
+        .pro-tip-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            color: #047857;
+        }
+
+        body.dark-theme .pro-tip-header {
+            color: #34d399;
+        }
+
+        /* Modal Dialog Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 650px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 8px;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--text-main);
+            background: var(--bg-card-subtle);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .project-card {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .project-card h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .project-card p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .app-layout {
+                grid-template-columns: 200px 1fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <header>
+        <div class="navbar-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-code"></i>
+            </div>
+            <div class="brand-title-group">
+                <h1>Self-Correcting Code Agent Studio</h1>
+                <div class="brand-subtitle">Write &rarr; Run &rarr; Debug &rarr; Improve (Automatically)</div>
+            </div>
+        </div>
+
+        <!-- Global Smart Search Option -->
+        <div class="search-bar-wrapper">
+            <div class="search-bar-inner">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="globalSearchInput" class="search-input" 
+                       placeholder="Search or enter any problem (e.g. anagram, vowels, matrix, prime)..." 
+                       onkeypress="if(event.key === 'Enter') handleSearchSubmit()">
+            </div>
+            <button class="btn-search" onclick="handleSearchSubmit()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Search &amp; Run
+            </button>
+        </div>
+
+        <div class="navbar-right">
+            <button class="icon-btn" title="Toggle Theme" onclick="toggleTheme()"><i class="fa-regular fa-sun" id="themeIcon"></i></button>
+            <div class="user-profile" onclick="openModal('profileModal')">
+                <div class="avatar">T</div>
+                <span class="user-name">Tejupriya</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; color: var(--text-muted);"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout Container -->
+    <div class="app-layout">
+
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="nav-section">
+                <a class="nav-item active" id="navHome" onclick="navTo('home')"><i class="fa-solid fa-house"></i> Home</a>
+                <a class="nav-item" id="navNewTask" onclick="navTo('new_task')"><i class="fa-solid fa-plus-circle"></i> New Task</a>
+                <a class="nav-item" id="navStudio" onclick="navTo('studio')"><i class="fa-solid fa-robot"></i> Agent Studio</a>
+                <a class="nav-item" id="navProjects" onclick="openModal('projectsModal')"><i class="fa-solid fa-folder-open"></i> Projects</a>
+                <a class="nav-item" id="navHistory" onclick="openModal('historyModal')"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+                <a class="nav-item" id="navSettings" onclick="openModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-heading">Quick Actions</div>
+                <a class="nav-item" onclick="loadSampleFibonacci()"><i class="fa-solid fa-circle-play"></i> Run Sample Task</a>
+                <a class="nav-item" onclick="loadSamplePalindrome()"><i class="fa-solid fa-book-open"></i> View Examples</a>
+                <a class="nav-item" onclick="openModal('helpModal')"><i class="fa-solid fa-circle-question"></i> Help &amp; Docs</a>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="sidebar-card-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h4>Smarter Code.<br>Fewer Errors.<br>Self-Correcting.</h4>
+            </div>
+        </aside>
+
+        <!-- Center Main Content -->
+        <main class="main-content">
+
+            <!-- Hero Banner -->
+            <div class="hero-banner">
+                <div class="hero-left">
+                    <h2>Self-Correcting Code Agent Studio</h2>
+                    <p>An AI agent that writes code, runs it, checks for errors and self-corrects until the task is completed.</p>
+                    <div class="hero-pills">
+                        <span class="hero-pill"><i class="fa-solid fa-code"></i> Code Generation</span>
+                        <span class="hero-pill"><i class="fa-solid fa-play"></i> Execution</span>
+                        <span class="hero-pill"><i class="fa-solid fa-triangle-exclamation"></i> Error Analysis</span>
+                        <span class="hero-pill"><i class="fa-solid fa-wrench"></i> Self-Correction</span>
+                    </div>
+                </div>
+
+                <div class="hero-illustration">
+                    <div class="bot-graphic">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="hero-flow-steps">
+                        <span>Observe</span>
+                        <span>Think</span>
+                        <span>Correct</span>
+                        <span>Succeed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspace Grid (Task Input, Code File View, Agent Workflow) -->
+            <div class="workspace-grid">
+
+                <!-- Sub-column 1: Task Input & Settings -->
+                <div class="card">
+                    <div class="card-tabs">
+                        <div class="tab-item active" id="tabTask" onclick="switchTab('task')"><i class="fa-solid fa-list-check"></i> Task</div>
+                        <div class="tab-item" id="tabCode" onclick="switchTab('code')"><i class="fa-solid fa-code"></i> Code Editor</div>
+                        <div class="tab-item" id="tabOutput" onclick="switchTab('output')"><i class="fa-solid fa-terminal"></i> Output</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Choose Preset Problem</label>
+                        <select id="presetTaskSelect" class="select-input" onchange="onPresetSelected(this.value)">
+                            <option value="">-- Select or type any problem --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Task Description</label>
+                        <textarea id="taskInput" placeholder="Implement a function to solve a problem with assertion tests..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Language</label>
+                        <select class="select-input">
+                            <option>Python</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Max Attempts</label>
+                        <select id="maxAttemptsInput" class="select-input">
+                            <option value="3" selected>3</option>
+                            <option value="5">5</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-purple-start" id="btnStartAgent">
+                        <i class="fa-solid fa-play"></i> Start Agent
+                    </button>
+                </div>
+
+                <!-- Sub-column 2: Live Generated Code View & Output Display -->
+                <div class="card" style="padding: 0; background: transparent; border: none; box-shadow: none; display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="code-view-container" style="flex: 1.2;">
+                        <div class="code-view-header">
+                            <div class="code-file-name">
+                                <i class="fa-brands fa-python" style="color: #38bdf8;"></i> main.py (Generated Code)
+                            </div>
+                            <button class="btn-copy" onclick="copyGeneratedCode()"><i class="fa-regular fa-copy"></i> Copy</button>
+                        </div>
+                        <div class="code-view-body" id="codeDisplay">
+def fibonacci(n):
+    if n <= 0:
+        return 0
+    if n == 1:
+        return 1
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+assert fibonacci(0) == 0
+assert fibonacci(1) == 1
+assert fibonacci(5) == 5
+assert fibonacci(10) == 55
+print("All fibonacci tests passed!")
+                        </div>
+                    </div>
+
+                    <!-- Program Output Section -->
+                    <div class="code-view-container" style="flex: 0.8; min-height: 160px;">
+                        <div class="code-view-header" style="background: #0f172a; border-bottom: 1px solid #1e293b;">
+                            <div class="code-file-name" style="color: #4ade80;">
+                                <i class="fa-solid fa-square-poll-vertical" style="color: #4ade80;"></i> Program Execution Output (STDOUT)
+                            </div>
+                            <span id="outputStatusBadge" style="font-size: 0.72rem; padding: 0.2rem 0.55rem; background: rgba(16, 185, 129, 0.2); color: #10b981; border-radius: 4px; font-weight: 700;">PASSED</span>
+                        </div>
+                        <div class="code-view-body" id="stdoutDisplay" style="color: #4ade80; background: #020617; font-size: 0.8rem;">
+All fibonacci tests passed!
+
+[Process Finished: Return Code 0]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-column 3: Agent Workflow Stepper -->
+                <div class="card">
+                    <div class="card-title-bar">
+                        <div class="card-title"><i class="fa-solid fa-diagram-project" style="color: var(--primary);"></i> Agent Workflow</div>
+                    </div>
+
+                    <div class="stepper-list">
+                        <div class="step-item passed" id="step1">
+                            <div class="step-number"><i class="fa-solid fa-check"></i></div>
+                            <div class="step-info">
+                                <h5>1. Generate Code</h5>
+                                <p>Initial solution generated.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item passed" id="step2">
+                            <div class="step-number"><i class="fa-solid fa-check"></i></div>
+                            <div class="step-info">
+                                <h5>2. Run &amp; Validate</h5>
+                                <p>Execution passed all assertions.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item passed" id="step3">
+                            <div class="step-number"><i class="fa-solid fa-check"></i></div>
+                            <div class="step-info">
+                                <h5>3. Self-Correct</h5>
+                                <p>No retry needed (Passed Attempt 1).</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item passed" id="step4">
+                            <div class="step-number"><i class="fa-solid fa-check"></i></div>
+                            <div class="step-info">
+                                <h5>4. Re-Test</h5>
+                                <p>Assertions verified cleanly.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item passed" id="step5">
+                            <div class="step-number"><i class="fa-solid fa-check"></i></div>
+                            <div class="step-info">
+                                <h5>5. Complete</h5>
+                                <p>Task finished successfully.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Row: Terminal Console & Agent's Fix Cards -->
+            <div class="bottom-grid">
+
+                <!-- Console Output Card -->
+                <div class="card">
+                    <div class="card-tabs" style="margin-bottom: 0.75rem;">
+                        <div class="tab-item active"><i class="fa-solid fa-terminal"></i> Console</div>
+                        <div class="tab-item"><i class="fa-solid fa-triangle-exclamation"></i> Errors</div>
+                        <div class="tab-item"><i class="fa-solid fa-file-lines"></i> Logs</div>
+                    </div>
+
+                    <div class="console-terminal" id="consoleOutput">
+                        <div class="terminal-cmd">$ python main.py</div>
+                        <div class="terminal-log">&check; Execution finished cleanly on Attempt 1.</div>
+                        <div class="terminal-log" style="color: #4ade80; font-weight: 700;">&check; Success! Task completed in 1 attempt(s).</div>
+                    </div>
+                </div>
+
+                <!-- Agent's Fix Card -->
+                <div class="card" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+                    <div class="agent-fix-box">
+                        <div class="fix-header">
+                            <i class="fa-solid fa-lightbulb" style="color: #0284c7;"></i> Agent's Fix
+                        </div>
+                        <div class="fix-text" id="fixDescription">
+                            Initial solution passed all assertion tests on Attempt 1 without requiring retries.
+                        </div>
+                        <div class="fix-code-box" id="fixCodeSnippet">
+def fibonacci(n):
+    if n <= 0:
+        return 0
+    if n == 1:
+        return 1
+    return fibonacci(n - 1) + fibonacci(n - 2)
+                        </div>
+                        <div class="fix-badge" id="fixBadge">
+                            <i class="fa-solid fa-circle-check"></i> Solution Verified on Attempt 1
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Right Metrics & Recent Runs Sidebar -->
+        <aside class="right-sidebar">
+
+            <!-- Recent Runs Card -->
+            <div class="card">
+                <div class="card-title-bar">
+                    <div class="card-title"><i class="fa-solid fa-clock" style="color: var(--primary);"></i> Recent Runs</div>
+                    <a onclick="openModal('historyModal')" style="font-size: 0.75rem; color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer;">View All</a>
+                </div>
+
+                <div class="run-list" id="recentRunList">
+                    <div class="run-item" onclick="loadPresetByName('Fibonacci')">
+                        <div class="run-item-left">
+                            <div class="status-icon passed"><i class="fa-solid fa-check"></i></div>
+                            <div class="run-info">
+                                <h5>Fibonacci Number</h5>
+                                <p>1 attempt &bull; Just now</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="run-item" onclick="loadPresetByName('Prime')">
+                        <div class="run-item-left">
+                            <div class="status-icon passed"><i class="fa-solid fa-check"></i></div>
+                            <div class="run-info">
+                                <h5>Prime Number Checker</h5>
+                                <p>1 attempt &bull; 12 mins ago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="run-item" id="runItemSum" onclick="loadPresetByName('Sum')">
+                        <div class="run-item-left">
+                            <div class="status-icon passed" id="sumArrayIcon"><i class="fa-solid fa-check"></i></div>
+                            <div class="run-info">
+                                <h5>Sum of Array</h5>
+                                <p>1 attempt &bull; 25 mins ago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="run-item" onclick="loadPresetByName('Palindrome')">
+                        <div class="run-item-left">
+                            <div class="status-icon passed"><i class="fa-solid fa-check"></i></div>
+                            <div class="run-info">
+                                <h5>Palindrome Check</h5>
+                                <p>1 attempt &bull; 1 hour ago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="run-item" onclick="loadPresetByName('Factorial')">
+                        <div class="run-item-left">
+                            <div class="status-icon passed"><i class="fa-solid fa-check"></i></div>
+                            <div class="run-info">
+                                <h5>Factorial Calculation</h5>
+                                <p>2 attempts &bull; 2 hours ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Performance Metrics Card -->
+            <div class="card">
+                <div class="card-title-bar">
+                    <div class="card-title"><i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i> Agent Performance</div>
+                </div>
+
+                <div class="performance-box">
+                    <div class="donut-chart">
+                        <div class="donut-inner">
+                            <span>100%</span>
+                        </div>
+                    </div>
+                    <div class="stats-col">
+                        <div class="stat-row">Avg. Attempts: <strong>1.2</strong></div>
+                        <div class="stat-row">Total Tasks: <strong>28</strong></div>
+                        <div class="stat-row">Auto-Fixes: <strong>28</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pro Tip Card -->
+            <div class="pro-tip-box">
+                <div class="pro-tip-header">
+                    <i class="fa-solid fa-rocket"></i> Pro Tip
+                </div>
+                Use the top search bar to ask ANY question or problem. The self-correcting agent will handle prompt generation, code writing, and verification!
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Projects Modal -->
+    <div class="modal-overlay" id="projectsModal" onclick="if(event.target === this) closeModal('projectsModal')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-folder-open" style="color: var(--primary);"></i> Saved Projects &amp; Benchmark Suites</h3>
+                <button class="modal-close-btn" onclick="closeModal('projectsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">Choose a pre-configured project suite to inspect or execute with the self-correcting agent:</p>
+                <div class="project-grid">
+                    <div class="project-card" onclick="closeModal('projectsModal'); loadPresetByName('Fibonacci');">
+                        <h4><i class="fa-solid fa-cubes" style="color: #6366f1;"></i> Fibonacci Suite</h4>
+                        <p>Recursive &amp; iterative sequence calculation with edge-case handling for 0 and 1.</p>
+                    </div>
+                    <div class="project-card" onclick="closeModal('projectsModal'); loadPresetByName('Prime');">
+                        <h4><i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> Prime Number Suite</h4>
+                        <p>Primality testing and sieve algorithm with assertion verification.</p>
+                    </div>
+                    <div class="project-card" onclick="closeModal('projectsModal'); loadPresetByName('Matrix');">
+                        <h4><i class="fa-solid fa-table-cells" style="color: #0891b2;"></i> Matrix Transpose Engine</h4>
+                        <p>2D array row-column transposition with square &amp; rectangular test cases.</p>
+                    </div>
+                    <div class="project-card" onclick="closeModal('projectsModal'); loadPresetByName('Vowel');">
+                        <h4><i class="fa-solid fa-font" style="color: #f59e0b;"></i> Vowel &amp; String Analyzer</h4>
+                        <p>String analysis, character frequency counter, and palindrome verification.</p>
+                    </div>
+                    <div class="project-card" onclick="closeModal('projectsModal'); loadPresetByName('Self-Correction');">
+                        <h4><i class="fa-solid fa-wrench" style="color: #ec4899;"></i> Self-Correction Benchmark</h4>
+                        <p>Controlled forced-bug scenario demonstrating automatic traceback analysis &amp; multi-attempt fix.</p>
+                    </div>
+                    <div class="project-card" onclick="closeModal('projectsModal'); loadPresetByName('Security');">
+                        <h4><i class="fa-solid fa-lock" style="color: #ef4444;"></i> AST Security Sandbox Test</h4>
+                        <p>Verifies AST guard rejection of unsafe modules (os.system, exec, shutil, eval).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay" id="historyModal" onclick="if(event.target === this) closeModal('historyModal')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> Execution History</h3>
+                <button class="modal-close-btn" onclick="closeModal('historyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="run-list" id="fullHistoryList">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal" onclick="if(event.target === this) closeModal('settingsModal')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-gear" style="color: var(--primary);"></i> Agent Settings</h3>
+                <button class="modal-close-btn" onclick="closeModal('settingsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Default Max Self-Correction Attempts</label>
+                    <select class="select-input" id="settingMaxAttempts">
+                        <option value="3" selected>3 Attempts (Recommended)</option>
+                        <option value="5">5 Attempts (Extended)</option>
+                        <option value="1">1 Attempt (Strict No Retry)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Subprocess Execution Timeout (Seconds)</label>
+                    <select class="select-input" id="settingTimeout">
+                        <option value="10" selected>10 Seconds</option>
+                        <option value="5">5 Seconds</option>
+                        <option value="3">3 Seconds</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>AST Security Guard Level</label>
+                    <select class="select-input">
+                        <option>Strict (Prohibit os.system, exec, eval, shutil, socket)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Synthesis Engine</label>
+                    <select class="select-input">
+                        <option>Dynamic Universal Synthesizer (Zero-Dependency Engine)</option>
+                    </select>
+                </div>
+                <button class="btn-purple-start" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help & Docs Modal -->
+    <div class="modal-overlay" id="helpModal" onclick="if(event.target === this) closeModal('helpModal')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-circle-question" style="color: var(--primary);"></i> Help &amp; Documentation</h3>
+                <button class="modal-close-btn" onclick="closeModal('helpModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">How the Self-Correcting Agent Works</h4>
+                <p style="margin-bottom: 1rem;">
+                    The agent operates via an autonomous 5-step feedback loop:
+                    <br><strong>1. Code Generation</strong>: Converts natural language task descriptions into executable Python code with unit assertions.
+                    <br><strong>2. AST Security Screening</strong>: Analyzes the AST tree to intercept hazardous modules or dangerous calls before execution.
+                    <br><strong>3. Isolated Execution</strong>: Runs code in a isolated subprocess with strict execution timeouts.
+                    <br><strong>4. Error Diagnostics</strong>: Captures STDOUT/STDERR tracebacks if assertions fail.
+                    <br><strong>5. Self-Correction</strong>: Synthesizes execution feedback to rewrite and fix code until all tests pass cleanly.
+                </p>
+
+                <h4 style="color: var(--text-main); margin-bottom: 0.5rem;">API Reference</h4>
+                <ul style="margin-left: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
+                    <li><strong>POST /api/run_task</strong> - Executes agent self-correction loop</li>
+                    <li><strong>POST /api/generate_prompt</strong> - Smart search prompt generator</li>
+                    <li><strong>GET /api/preset_tasks</strong> - Fetches all pre-configured benchmark tasks</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div class="modal-overlay" id="profileModal" onclick="if(event.target === this) closeModal('profileModal')">
+        <div class="modal-box" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user" style="color: var(--primary);"></i> User Profile</h3>
+                <button class="modal-close-btn" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div class="avatar" style="width: 64px; height: 64px; font-size: 1.8rem; margin: 0 auto 1rem;">T</div>
+                <h3 style="color: var(--text-main); font-weight: 800;">Tejupriya Kukkala</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Developer &bull; Self-Correcting Code Agent Studio</p>
+                <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: left; font-size: 0.82rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">Workspace:</span>
+                        <strong style="color: var(--text-main);">skillaudit2</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: var(--text-muted);">Agent Engine:</span>
+                        <strong style="color: var(--success);">&check; Active &amp; Verified</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Version:</span>
+                        <strong style="color: var(--text-main);">v2.4.0 Studio</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        let currentPresets = [];
+        let historyLogs = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPresets();
+            document.getElementById('btnStartAgent').addEventListener('click', runAgentTask);
+            
+            // Default initial task
+            document.getElementById('taskInput').value = `Write a function fibonacci(n) that returns the nth Fibonacci number, where fibonacci(0) == 0 and fibonacci(1) == 1.
+
+Required tests:
+assert fibonacci(0) == 0
+assert fibonacci(1) == 1
+assert fibonacci(5) == 5
+assert fibonacci(10) == 55
+print("All fibonacci tests passed!")`;
+        });
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const icon = document.getElementById('themeIcon');
+            if (document.body.classList.contains('dark-theme')) {
+                icon.className = 'fa-regular fa-moon';
+            } else {
+                icon.className = 'fa-regular fa-sun';
+            }
+        }
+
+        function openModal(id) {
+            if (id === 'historyModal') renderHistoryModal();
+            document.getElementById(id).classList.add('open');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+
+        function saveSettings() {
+            const attempts = document.getElementById('settingMaxAttempts').value;
+            document.getElementById('maxAttemptsInput').value = attempts;
+            closeModal('settingsModal');
+            alert("Settings saved successfully!");
+        }
+
+        function navTo(target) {
+            document.querySelectorAll('.sidebar .nav-item').forEach(el => el.classList.remove('active'));
+            if (target === 'home') {
+                document.getElementById('navHome').classList.add('active');
+                loadPresetByName('Fibonacci');
+            } else if (target === 'new_task') {
+                document.getElementById('navNewTask').classList.add('active');
+                resetTaskWorkspace();
+            } else if (target === 'studio') {
+                document.getElementById('navStudio').classList.add('active');
+                document.querySelector('.hero-banner').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.card-tabs .tab-item').forEach(t => t.classList.remove('active'));
+            if (tabName === 'task') document.getElementById('tabTask').classList.add('active');
+            if (tabName === 'code') {
+                document.getElementById('tabCode').classList.add('active');
+                document.getElementById('codeDisplay').scrollIntoView({ behavior: 'smooth' });
+            }
+            if (tabName === 'output') {
+                document.getElementById('tabOutput').classList.add('active');
+                document.getElementById('stdoutDisplay').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function resetTaskWorkspace() {
+            document.getElementById('taskInput').value = '';
+            document.getElementById('codeDisplay').textContent = '# Ready to generate code...';
+            document.getElementById('stdoutDisplay').textContent = '(Awaiting execution output...)';
+            document.getElementById('outputStatusBadge').style.background = 'rgba(148, 163, 184, 0.2)';
+            document.getElementById('outputStatusBadge').style.color = '#94a3b8';
+            document.getElementById('outputStatusBadge').textContent = 'READY';
+            document.getElementById('consoleOutput').innerHTML = '<div class="terminal-cmd">$ python main.py</div><div class="terminal-log">Waiting for agent execution...</div>';
+            resetStepper();
+        }
+
+        function resetStepper() {
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById(`step${i}`);
+                if (el) {
+                    el.className = 'step-item';
+                    el.querySelector('.step-number').textContent = i;
+                }
+            }
+        }
+
+        function loadSampleFibonacci() {
+            loadPresetByName('Fibonacci');
+        }
+
+        function loadSamplePalindrome() {
+            loadPresetByName('Palindrome');
+        }
+
+        async function loadPresets() {
+            try {
+                const res = await fetch('/api/preset_tasks');
+                const data = await res.json();
+                if (data.status === 'success') {
+                    currentPresets = data.presets;
+                    populatePresetDropdown();
+                }
+            } catch (err) {
+                console.error("Failed to load presets:", err);
+            }
+        }
+
+        function populatePresetDropdown() {
+            const sel = document.getElementById('presetTaskSelect');
+            sel.innerHTML = '<option value="">-- Choose Preset Task or Type Custom --</option>';
+            currentPresets.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = `${p.name} (${p.type})`;
+                sel.appendChild(opt);
+            });
+        }
+
+        function onPresetSelected(id) {
+            if (!id) return;
+            const match = currentPresets.find(p => p.id === id);
+            if (match) {
+                document.getElementById('taskInput').value = match.task;
+                runAgentTask(match.type);
+            }
+        }
+
+        function loadPresetByName(keyword) {
+            if (!currentPresets.length) return;
+            const match = currentPresets.find(p => p.name.toLowerCase().includes(keyword.toLowerCase()));
+            if (match) {
+                document.getElementById('presetTaskSelect').value = match.id;
+                document.getElementById('taskInput').value = match.task;
+                runAgentTask(match.type);
+            }
+        }
+
+        async function handleSearchSubmit() {
+            const query = document.getElementById('globalSearchInput').value.trim();
+            if (!query) return;
+
+            const searchBtn = document.querySelector('.btn-search');
+            searchBtn.innerHTML = '<i class="fa-solid fa-spinner spinner"></i> Searching...';
+            searchBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/generate_prompt', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await res.json();
+                if (data.status === 'success') {
+                    document.getElementById('taskInput').value = data.task;
+                    runAgentTask();
+                } else {
+                    alert(data.message || "Failed to generate task prompt.");
+                }
+            } catch (err) {
+                console.error("Search error:", err);
+                alert("Error connecting to search service.");
+            } finally {
+                searchBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Search &amp; Run';
+                searchBtn.disabled = false;
+            }
+        }
+
+        async function runAgentTask(presetType = "custom") {
+            const taskText = document.getElementById('taskInput').value.trim();
+            const maxAttempts = parseInt(document.getElementById('maxAttemptsInput').value) || 3;
+            const btn = document.getElementById('btnStartAgent');
+
+            if (!taskText) {
+                alert("Please enter a task description or pick a preset.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner spinner"></i> Running Agent...';
+
+            updateStepperState(1);
+
+            document.getElementById('consoleOutput').innerHTML = '<div class="terminal-cmd">$ python main.py</div><div class="terminal-log">Starting self-correction execution loop...</div>';
+
+            try {
+                const response = await fetch('/api/run_task', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        task: taskText,
+                        max_attempts: maxAttempts,
+                        timeout: 10,
+                        preset_type: presetType
+                    })
+                });
+
+                const res = await response.json();
+                if (res.status === 'success') {
+                    renderAgentResults(res.data);
+                    recordHistoryRun(taskText, res.data);
+                } else {
+                    document.getElementById('consoleOutput').innerHTML += `<div class="terminal-err">${res.message}</div>`;
+                    updateStepperState(2, false);
+                }
+            } catch (err) {
+                console.error("Execution error:", err);
+                document.getElementById('consoleOutput').innerHTML += `<div class="terminal-err">Failed to connect to agent server.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-play"></i> Start Agent';
+            }
+        }
+
+        function updateStepperState(activeStep, passed = true) {
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById(`step${i}`);
+                if (!el) continue;
+                if (i < activeStep) {
+                    el.className = 'step-item passed';
+                    el.querySelector('.step-number').innerHTML = '<i class="fa-solid fa-check"></i>';
+                } else if (i === activeStep) {
+                    el.className = passed ? 'step-item active' : 'step-item failed';
+                    el.querySelector('.step-number').innerHTML = passed ? '<i class="fa-solid fa-spinner spinner"></i>' : '!';
+                } else {
+                    el.className = 'step-item';
+                    el.querySelector('.step-number').textContent = i;
+                }
+            }
+        }
+
+        function updateStepperForResults(data) {
+            const isPassed = data.final_status === 'PASSED';
+            const attempts = data.attempts_used;
+
+            const setStep = (num, status, iconHtml, titleText, subtitleText) => {
+                const el = document.getElementById(`step${num}`);
+                if (!el) return;
+                el.className = `step-item ${status}`;
+                const numEl = el.querySelector('.step-number');
+                if (iconHtml) numEl.innerHTML = iconHtml;
+                if (titleText) el.querySelector('h5').textContent = titleText;
+                if (subtitleText) el.querySelector('p').textContent = subtitleText;
+            };
+
+            setStep(1, 'passed', '<i class="fa-solid fa-check"></i>', '1. Generate Code', 'Initial solution generated.');
+
+            if (isPassed && attempts === 1) {
+                setStep(2, 'passed', '<i class="fa-solid fa-check"></i>', '2. Run &amp; Validate', 'Execution passed all assertions.');
+                setStep(3, 'passed', '<i class="fa-solid fa-check"></i>', '3. Self-Correct', 'No retry needed (Passed Attempt 1).');
+                setStep(4, 'passed', '<i class="fa-solid fa-check"></i>', '4. Re-Test', 'Assertions verified cleanly.');
+                setStep(5, 'passed', '<i class="fa-solid fa-check"></i>', '5. Complete', 'Task finished successfully.');
+            } else if (isPassed && attempts > 1) {
+                setStep(2, 'failed', '!', '2. Run &amp; Validate', `Attempt 1 failed. Analyzing error...`);
+                setStep(3, 'passed', '<i class="fa-solid fa-check"></i>', '3. Self-Correct', `Applied fix on Attempt ${attempts}.`);
+                setStep(4, 'passed', '<i class="fa-solid fa-check"></i>', '4. Re-Test', `Re-tested updated code.`);
+                setStep(5, 'passed', '<i class="fa-solid fa-check"></i>', '5. Complete', `Task completed in ${attempts} attempts!`);
+            } else {
+                setStep(2, 'failed', '!', '2. Run &amp; Validate', 'Execution failed assertions.');
+                setStep(3, 'failed', '!', '3. Self-Correct', 'Max attempts reached.');
+                setStep(4, 'failed', '!', '4. Re-Test', 'Validation failed.');
+                setStep(5, 'failed', '!', '5. Complete', 'Task failed to resolve.');
+            }
+        }
+
+        function renderAgentResults(data) {
+            const isPassed = data.final_status === 'PASSED';
+            const lastAttempt = data.history[data.history.length - 1];
+
+            // 1. Update Code View
+            document.getElementById('codeDisplay').textContent = lastAttempt.code;
+
+            // 2. Build Terminal Logs
+            let termHtml = '<div class="terminal-cmd">$ python main.py</div>';
+            
+            data.history.forEach((item) => {
+                termHtml += `<div style="color:#94a3b8; margin-top:0.3rem;">--- Attempt ${item.attempt} ---</div>`;
+                if (item.exec_result.stdout) {
+                    termHtml += `<div>${escapeHtml(item.exec_result.stdout)}</div>`;
+                }
+                if (item.exec_result.stderr) {
+                    termHtml += `<div class="terminal-err">${escapeHtml(item.exec_result.stderr)}</div>`;
+                }
+            });
+
+            if (isPassed) {
+                termHtml += `<div class="terminal-log" style="color: #4ade80; font-weight: 700; margin-top:0.5rem;">&check; Success! Task completed in ${data.attempts_used} attempt(s).</div>`;
+            } else {
+                termHtml += `<div class="terminal-err" style="font-weight:700; margin-top:0.5rem;">&cross; Task Failed after ${data.attempts_used} attempts.</div>`;
+            }
+            document.getElementById('consoleOutput').innerHTML = termHtml;
+
+            // 3. Update Program STDOUT Card
+            const stdoutEl = document.getElementById('stdoutDisplay');
+            const badgeEl = document.getElementById('outputStatusBadge');
+            
+            const rawStdout = lastAttempt.exec_result.stdout ? lastAttempt.exec_result.stdout : '(No stdout output)';
+            const rawStderr = lastAttempt.exec_result.stderr ? lastAttempt.exec_result.stderr : '';
+            const retCode = lastAttempt.exec_result.return_code !== null ? lastAttempt.exec_result.return_code : 'None';
+
+            if (isPassed) {
+                badgeEl.style.background = 'rgba(16, 185, 129, 0.2)';
+                badgeEl.style.color = '#10b981';
+                badgeEl.textContent = 'PASSED (Return Code 0)';
+                stdoutEl.style.color = '#4ade80';
+                stdoutEl.textContent = `${rawStdout}\n\n[Process Finished: Return Code ${retCode}]`;
+            } else {
+                badgeEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                badgeEl.style.color = '#ef4444';
+                badgeEl.textContent = 'FAILED';
+                stdoutEl.style.color = '#fca5a5';
+                stdoutEl.textContent = `${rawStdout}\n\n[STDERR]:\n${rawStderr}\n\n[Process Finished: Return Code ${retCode}]`;
+            }
+
+            // Update Stepper
+            updateStepperForResults(data);
+
+            // 4. Update Agent's Fix Box
+            const fixBox = document.getElementById('fixDescription');
+            const fixSnippet = document.getElementById('fixCodeSnippet');
+            const fixBadge = document.getElementById('fixBadge');
+
+            if (data.attempts_used > 1 && isPassed) {
+                fixBox.textContent = `The agent identified an issue in attempt 1, analyzed the subprocess traceback, and applied self-correction logic to complete the task successfully.`;
+                fixSnippet.textContent = lastAttempt.code;
+                fixBadge.style.background = 'var(--success)';
+                fixBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> Self-Correction Applied &amp; Passed';
+            } else if (isPassed) {
+                fixBox.textContent = `Initial solution passed all assertion tests on Attempt 1 without requiring retries.`;
+                fixSnippet.textContent = lastAttempt.code;
+                fixBadge.style.background = 'var(--success)';
+                fixBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> Solution Verified on Attempt 1';
+            } else {
+                fixBox.textContent = `Execution encountered errors across all attempts.`;
+                fixSnippet.textContent = lastAttempt.code;
+                fixBadge.style.background = 'var(--danger)';
+                fixBadge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Max Attempts Reached';
+            }
+        }
+
+        function recordHistoryRun(taskText, data) {
+            const firstLine = taskText.split('\n')[0].substring(0, 45);
+            historyLogs.unshift({
+                title: firstLine,
+                task: taskText,
+                attempts: data.attempts_used,
+                status: data.final_status,
+                time: new Date().toLocaleTimeString()
+            });
+        }
+
+        function renderHistoryModal() {
+            const container = document.getElementById('fullHistoryList');
+            if (!historyLogs.length) {
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center;">No tasks executed in this session yet.</p>';
+                return;
+            }
+            let html = '';
+            historyLogs.forEach(h => {
+                const passed = h.status === 'PASSED';
+                html += `
+                <div class="run-item" onclick="closeModal('historyModal'); document.getElementById('taskInput').value = \`${escapeHtml(h.task)}\`; runAgentTask();">
+                    <div class="run-item-left">
+                        <div class="status-icon ${passed ? 'passed' : 'failed'}">
+                            <i class="fa-solid ${passed ? 'fa-check' : 'fa-xmark'}"></i>
+                        </div>
+                        <div class="run-info">
+                            <h5>${escapeHtml(h.title)}</h5>
+                            <p>${h.attempts} attempt(s) &bull; ${h.time}</p>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--primary); font-weight: 700;">Re-Run &rarr;</span>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function copyGeneratedCode() {
+            const code = document.getElementById('codeDisplay').textContent;
+            navigator.clipboard.writeText(code);
+            alert("Code copied to clipboard!");
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
