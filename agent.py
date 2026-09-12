@@ -12,8 +12,13 @@ import urllib.request
 from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
 
-from .prompts import SYSTEM_PROMPT, get_initial_prompt, get_correction_prompt
-from .executor import clean_code, execute_code
+try:
+    from .prompts import SYSTEM_PROMPT, get_initial_prompt, get_correction_prompt
+    from .executor import clean_code, execute_code
+except (ImportError, ValueError):
+    from prompts import SYSTEM_PROMPT, get_initial_prompt, get_correction_prompt
+    from executor import clean_code, execute_code
+
 
 # Load environment variables from .env file if available
 load_dotenv()
