@@ -21,8 +21,12 @@ except ModuleNotFoundError:
     from agent import run_agent
     from tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates"))
+static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "static"))
+
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 handler = app
+
 
 
 
