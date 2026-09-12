@@ -31,8 +31,11 @@ handler = app
 
 
 @app.route("/")
+@app.route("/index")
+@app.route("/api/index")
 def index():
     return render_template("index.html")
+
 
 
 @app.route("/api/preset_tasks", methods=["GET"])
