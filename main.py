@@ -8,9 +8,19 @@ import os
 
 # Add project root directory to path to enable package execution
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from self_correcting_agent.agent import run_agent
-from self_correcting_agent.tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
+try:
+    from self_correcting_agent.agent import run_agent
+    from self_correcting_agent.tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
+    from self_correcting_agent.web_app import app
+except ModuleNotFoundError:
+    from agent import run_agent
+    from tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
+    from web_app import app
+
+handler = app
+
 
 
 def print_summary_table(results):

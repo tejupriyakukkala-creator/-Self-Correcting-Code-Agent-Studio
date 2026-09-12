@@ -10,13 +10,20 @@ import time
 import re
 from flask import Flask, render_template, request, jsonify
 
-# Add workspace root to sys.path
+# Add workspace root and current dir to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from self_correcting_agent.agent import run_agent
-from self_correcting_agent.tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
+try:
+    from self_correcting_agent.agent import run_agent
+    from self_correcting_agent.tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
+except ModuleNotFoundError:
+    from agent import run_agent
+    from tests import TASKS, DEMO_SELF_CORRECT_TASK, DEMO_TIMEOUT_TASK, DEMO_SECURITY_TASK
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+handler = app
+
 
 
 @app.route("/")
